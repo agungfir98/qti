@@ -1,26 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+/* @layer components {
+  .checkbox-label::before {
+    content: "";
+    width: 21px;
+    height: 21px;
+    border-radius: 0.4em;
+    margin-right: 0.5em;
+    border: 0.05em solid black;
   }
-  body {
-    color: white;
-    background: black;
+
+  input[type="checkbox"]:checked + .checkbox-label::before {
+    content: "";
+    
+    font-weight: 600;
   }
-}
+} */

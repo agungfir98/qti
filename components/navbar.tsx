@@ -1,7 +1,6 @@
 export const Navbar: React.FC<{
-  navOpen: boolean;
   setNavOpen: () => void;
-}> = ({ navOpen, setNavOpen }) => {
+}> = ({ setNavOpen }) => {
   const data = {
     name: "Agung Firmansyah",
     role: "Administrator",

@@ -1,11 +1,14 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { activeNavContext } from "../pages";
 import { activeState } from "../types/type";
+import UserComponent from "./userComponent";
 
 export const SideNav: React.FC<{
   setNavOpen: () => void;
   onChangeActiveNav: (str: string) => void;
 }> = ({ setNavOpen, onChangeActiveNav }) => {
+  const [UserOpen, setUserOpen] = useState<boolean>(false);
+
   const { activeNav, sideNavOpen } = useContext(activeNavContext);
 
   const handleToggleNav = () => setNavOpen();
@@ -19,7 +22,7 @@ export const SideNav: React.FC<{
       <div
         className={`${
           !sideNavOpen ? "-left-[999px] lg:w-0" : "left-0 lg:w-[260px]"
-        } h-[100vh] w-full transition-all duration-1000 ease-in-out bg-black/50 absolute  top-0 flex overflow-hidden lg:static  `}
+        } h-[100vh] w-full transition-all duration-1000 ease-in-out bg-black/50 absolute  top-0 flex overflow-hidden lg:static z-10`}
       >
         <nav className="max-w-[300px] h-full bg-[#F6F6F9] pt-[21px] px-3 flex flex-col gap-2 grow fill-[#2D3657]">
           <h1 className="text-[#A3A8AD] font-semibold text-sm">Analysis</h1>
@@ -76,7 +79,14 @@ export const SideNav: React.FC<{
           </button>
 
           <h1 className="text-[#A3A8AD] font-semibold text-sm">Admin Access</h1>
-          <button className="h-[42px] w-full bg-white flex items-center gap-2  px-3 rounded-md overflow-hidden">
+
+          {/* // * UserAcess Btn ==== */}
+          <button
+            className={`${
+              UserOpen ? "bg-green-600 text-white fill-white" : "text-[#2D3657]"
+            }  h-[42px] w-full bg-white flex items-center gap-2  px-3 rounded-md overflow-hidden`}
+            onClick={() => setUserOpen(!UserOpen)}
+          >
             <div id="UserIcon">
               <svg
                 width="21"
@@ -88,8 +98,11 @@ export const SideNav: React.FC<{
               </svg>
             </div>
 
-            <h2 className="text-[#2D3657] font-medium grow">User Management</h2>
-            <div id="arrow" className="">
+            <h2 className="font-medium grow">User Management</h2>
+            <div
+              id="arrow"
+              className={`${UserOpen && "rotate-90"} transition-transform`}
+            >
               <svg
                 width="11"
                 height="18"
@@ -99,7 +112,7 @@ export const SideNav: React.FC<{
               >
                 <path
                   d="M1.8335 1.66666L9.16683 8.99999L1.8335 16.3333"
-                  stroke="#2D3657"
+                  stroke={`${UserOpen ? "#ffffff" : "#2D3657"} `}
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -107,11 +120,33 @@ export const SideNav: React.FC<{
               </svg>
             </div>
           </button>
+
+          {UserOpen && (
+            <button
+              onClick={() => handleChangeNavState(activeState.USER_MNG)}
+              className={`${
+                activeNav === activeState.USER_MNG
+                  ? "bg-green-600 fill-white"
+                  : "bg-white text-[#2D3657]"
+              } h-[42px] w-full flex items-center gap-2 px-3 rounded-md transition-all`}
+            >
+              <h2
+                className={`${
+                  activeNav === activeState.USER_MNG
+                    ? "text-white"
+                    : "text-[#2D3657]"
+                } font-medium`}
+              >
+                User
+              </h2>
+            </button>
+          )}
         </nav>
+        {/* // * close sideNav Btn ========= */}
         <div
           onClick={handleToggleNav}
           id="closeBtn"
-          className="w-fit h-fit p-4 lg:hidden"
+          className="w-fit h-fit p-4 lg:hidden fill-white"
         >
           <svg
             width="24"

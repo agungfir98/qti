@@ -1,17 +1,13 @@
-import { useCallback } from "react";
-
 export const Navbar: React.FC<{
   navOpen: boolean;
-  setNavOpen: (arg: boolean) => void;
+  setNavOpen: () => void;
 }> = ({ navOpen, setNavOpen }) => {
   const data = {
     name: "Agung Firmansyah",
     role: "Administrator",
   };
 
-  const handleToggleNav = useCallback(() => {
-    setNavOpen(!navOpen);
-  }, [navOpen, setNavOpen]);
+  const handleToggleNav = () => setNavOpen();
 
   return (
     <nav className="w-full bg-[#F6F6F9] h-[73px] px-5 md:px-8 flex justify-between items-center">

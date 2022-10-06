@@ -2,17 +2,15 @@ import { useCallback } from "react";
 
 export const SlideMenu: React.FC<{
   navOpen: boolean;
-  setNavOpen: (arg: boolean) => void;
+  setNavOpen: () => void;
 }> = ({ navOpen, setNavOpen }) => {
-  const handleToggleNav = useCallback(() => {
-    setNavOpen(!navOpen);
-  }, [navOpen, setNavOpen]);
+  const handleToggleNav = () => setNavOpen();
 
   return (
     <div
       className={`${
         !navOpen ? "-left-[999px] lg:w-0" : "left-0 lg:w-[260px]"
-      } w-full transition-all duration-1000 ease-in-out h-full bg-black/50 absolute  top-0 flex overflow-hidden lg:static  `}
+      } h-[100vh] w-full transition-all duration-1000 ease-in-out bg-black/50 absolute  top-0 flex overflow-hidden lg:static  `}
     >
       <nav className="max-w-[300px] h-full bg-[#F6F6F9] pt-[21px] px-3 flex flex-col gap-2 grow">
         <h1 className="text-[#A3A8AD] font-semibold text-sm">Analysis</h1>

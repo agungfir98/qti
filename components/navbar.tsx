@@ -1,13 +1,26 @@
-export const Navbar = () => {
+import { useCallback } from "react";
+
+export const Navbar: React.FC<{
+  navOpen: boolean;
+  setNavOpen: (arg: boolean) => void;
+}> = ({ navOpen, setNavOpen }) => {
   const data = {
     name: "Agung Firmansyah",
     role: "Administrator",
   };
 
+  const handleToggleNav = useCallback(() => {
+    setNavOpen(!navOpen);
+  }, [navOpen, setNavOpen]);
+
   return (
-    <nav className="w-full bg-white h-[73px] px-5 md:px-8 flex justify-between items-center outline outline-1 outline-black">
+    <nav className="w-full bg-[#F6F6F9] h-[73px] px-5 md:px-8 flex justify-between items-center">
       <div className="flex gap-3 items-center h-full">
-        <div id="hamburger">
+        <div
+          id="hamburger"
+          className="cursor-pointer"
+          onClick={handleToggleNav}
+        >
           <svg
             width="18"
             height="17"
@@ -21,7 +34,7 @@ export const Navbar = () => {
             />
           </svg>
         </div>
-        <h1 className="font-bold text-xl">LOGO</h1>
+        <h1 className="font-bold text-xl cursor-default">LOGO</h1>
       </div>
       <div id="profile" className="flex gap-3 h-10 items-center">
         <div className="flex rounded-full  w-10 h-10 bg-black text-white font-bold items-center justify-center">

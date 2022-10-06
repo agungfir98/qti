@@ -3,3 +3,9 @@ export interface loginForm {
   password: string;
   rememberMe: boolean;
 }
+
+export enum activeState {
+  DASHBOARD = "dashboard",
+  SALES = "sales",
+  USER_MNG = "user-management",
+}

@@ -4,6 +4,7 @@ import { Dashboard } from "../components/dashboard";
 import { Navbar } from "../components/navbar";
 import SalesComponent from "../components/sales";
 import { SideNav } from "../components/sideNav";
+import UserComponent from "../components/userComponent";
 import { activeState } from "../types/type";
 
 export const activeNavContext = createContext({
@@ -28,7 +29,7 @@ const Home: NextPage = () => {
 
   return (
     <activeNavContext.Provider value={{ sideNavOpen, activeNav }}>
-      <div className="max-h-screen bg-[#F6F6F9] overflow-hidden">
+      <div className="max-h-screen bg-[#F6F6F9] overflow-hidden motion-reduce:transition-none motion-reduce:hover:transform-none">
         <Navbar setNavOpen={handleNav} />
         <div className="h-[calc(100vh-73px)] flex">
           <SideNav
@@ -40,6 +41,8 @@ const Home: NextPage = () => {
               <Dashboard />
             ) : activeNav === activeState.SALES ? (
               <SalesComponent />
+            ) : activeNav === activeState.USER_MNG ? (
+              <UserComponent />
             ) : null}
           </main>
         </div>

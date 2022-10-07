@@ -1,5 +1,6 @@
 import React from "react";
 import TableComponent from "./table/tableComponent";
+import { UserTable } from "./user/userTable";
 
 const UserComponent = () => {
   return (
@@ -10,12 +11,12 @@ const UserComponent = () => {
           <p className="font-medium text-sm text-black/50">User</p>
         </div>
         <div id="right" className="flex gap-2 justify-center items-center">
-          <div className="flex items-center gap-2 w-full">
-            <form id="search" className="relative z-0">
+          <div className="flex items-center gap-2 w-full max-h-9">
+            <form id="search" className="relative z-0 ">
               <input
                 type="text"
                 placeholder="Search name"
-                className="px-2 py-3 bg-white rounded-md outline outline-1 outline-slate-400 w-full"
+                className="px-2 py-5 max-h-9 bg-white rounded-md outline outline-1 outline-slate-400 w-full"
               />
               <button className="absolute right-2 top-1/2 -translate-y-1/2 z-0">
                 <svg
@@ -34,7 +35,7 @@ const UserComponent = () => {
             </form>
             <div
               id="createbtn"
-              className="grow bg-green-600 h-10 rounded-md px-3 p-6 flex items-center text-white cursor-pointer"
+              className="grow bg-green-600 max-h-9 rounded-md px-3 p-5 flex items-center text-white cursor-pointer"
             >
               <div id="icon" className="pr-2 ">
                 <svg
@@ -59,7 +60,7 @@ const UserComponent = () => {
           </div>
         </div>
       </div>
-      <TableComponent />
+      <UserTable />
     </div>
   );
 };

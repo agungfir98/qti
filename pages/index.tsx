@@ -10,9 +10,11 @@ import { activeState } from "../types/type";
 export const activeNavContext = createContext({
   sideNavOpen: false,
   activeNav: "",
+  sideNavUserOpen: false,
 });
 const Home: NextPage = () => {
   const [sideNavOpen, setSideNavOpen] = useState<boolean>(false);
+  const [sideNavUserOpen, setSideNavUserOpen] = useState<boolean>(false);
 
   const [activeNav, setActiveNav] = useState<string>(activeState.DASHBOARD);
 
@@ -28,13 +30,18 @@ const Home: NextPage = () => {
   }, [activeNav]);
 
   return (
-    <activeNavContext.Provider value={{ sideNavOpen, activeNav }}>
+    <activeNavContext.Provider
+      value={{ sideNavOpen, activeNav, sideNavUserOpen }}
+    >
       <div className="max-h-screen bg-[#F6F6F9] overflow-hidden motion-reduce:transition-none motion-reduce:hover:transform-none">
         <Navbar setNavOpen={handleNav} />
         <div className="h-[calc(100vh-73px)] flex">
           <SideNav
             setNavOpen={handleNav}
-            onChangeActiveNav={(str: string) => handleActiveNav(str)}
+            onChangeActiveNav={(str: string) => {
+              handleActiveNav(str);
+            }}
+            onChangeUserNav={(arg) => setSideNavUserOpen(arg)}
           />
           <main className="p-5 py-6 h-full grow overflow-auto">
             {activeNav === activeState.DASHBOARD ? (

@@ -4,6 +4,14 @@ export interface loginForm {
   rememberMe: boolean;
 }
 
+export interface credentials {
+  id: string;
+  email: string;
+  employee: string;
+  is_active: boolean;
+  token: string;
+}
+
 export enum activeState {
   DASHBOARD = "dashboard",
   SALES = "sales",

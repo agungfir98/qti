@@ -1,15 +1,14 @@
 import { useContext, useState } from "react";
 import { activeNavContext } from "../pages";
 import { activeState } from "../types/type";
-import UserComponent from "./userComponent";
 
 export const SideNav: React.FC<{
   setNavOpen: () => void;
   onChangeActiveNav: (str: string) => void;
-}> = ({ setNavOpen, onChangeActiveNav }) => {
-  const [UserOpen, setUserOpen] = useState<boolean>(false);
-
-  const { activeNav, sideNavOpen } = useContext(activeNavContext);
+  onChangeUserNav: (arg: boolean) => void;
+}> = ({ setNavOpen, onChangeActiveNav, onChangeUserNav }) => {
+  const { activeNav, sideNavOpen, sideNavUserOpen } =
+    useContext(activeNavContext);
 
   const handleToggleNav = () => setNavOpen();
   const handleChangeNavState = (str: string) => {
@@ -28,7 +27,10 @@ export const SideNav: React.FC<{
           <h1 className="text-[#A3A8AD] font-semibold text-sm">Analysis</h1>
 
           <button
-            onClick={() => handleChangeNavState(activeState.DASHBOARD)}
+            onClick={() => {
+              handleChangeNavState(activeState.DASHBOARD);
+              onChangeUserNav(false);
+            }}
             className={`${
               activeNav === activeState.DASHBOARD
                 ? "bg-green-600 fill-white"
@@ -57,7 +59,10 @@ export const SideNav: React.FC<{
           </button>
 
           <button
-            onClick={() => handleChangeNavState(activeState.SALES)}
+            onClick={() => {
+              handleChangeNavState(activeState.SALES);
+              onChangeUserNav(false);
+            }}
             className={`${
               activeNav === activeState.SALES
                 ? "bg-green-600 fill-white text-white"
@@ -83,9 +88,11 @@ export const SideNav: React.FC<{
           {/* // * UserAcess Btn ==== */}
           <button
             className={`${
-              UserOpen ? "bg-green-600 text-white fill-white" : "text-[#2D3657]"
+              sideNavUserOpen
+                ? "bg-green-600 text-white fill-white"
+                : "text-[#2D3657]"
             }  h-[42px] w-full bg-white flex items-center gap-2  px-3 rounded-md overflow-hidden`}
-            onClick={() => setUserOpen(!UserOpen)}
+            onClick={() => onChangeUserNav(!sideNavUserOpen)}
           >
             <div id="UserIcon">
               <svg
@@ -101,7 +108,9 @@ export const SideNav: React.FC<{
             <h2 className="font-medium grow">User Management</h2>
             <div
               id="arrow"
-              className={`${UserOpen && "rotate-90"} transition-transform`}
+              className={`${
+                sideNavUserOpen && "rotate-90"
+              } transition-transform`}
             >
               <svg
                 width="11"
@@ -112,7 +121,7 @@ export const SideNav: React.FC<{
               >
                 <path
                   d="M1.8335 1.66666L9.16683 8.99999L1.8335 16.3333"
-                  stroke={`${UserOpen ? "#ffffff" : "#2D3657"} `}
+                  stroke={`${sideNavUserOpen ? "#ffffff" : "#2D3657"} `}
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -121,7 +130,7 @@ export const SideNav: React.FC<{
             </div>
           </button>
 
-          {UserOpen && (
+          {sideNavUserOpen && (
             <button
               onClick={() => handleChangeNavState(activeState.USER_MNG)}
               className={`${

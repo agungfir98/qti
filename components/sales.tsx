@@ -1,5 +1,5 @@
 import React from "react";
-import TableComponent from "./table/tableComponent";
+import SalesTableComponent from "./sales/salesTableComponent";
 
 const SalesComponent: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const SalesComponent: React.FC = () => {
         <h1 className="font-semibold text-lg">Sales</h1>
         <p className="font-medium text-sm text-black/50">June 2022</p>
       </div>
-      <TableComponent />
+      <SalesTableComponent />
     </div>
   );
 };

@@ -122,9 +122,9 @@ export const SideNav: React.FC<{
                 <path
                   d="M1.8335 1.66666L9.16683 8.99999L1.8335 16.3333"
                   stroke={`${sideNavUserOpen ? "#ffffff" : "#2D3657"} `}
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             </div>

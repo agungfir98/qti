@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { FormEvent, HTMLInputTypeAttribute, useEffect, useState } from "react";
 import { credentials, loginForm } from "../types/type";
 import { api } from "../utils/api";
-import { setCredentials } from "../utils/credentials";
 
 const LoginPage: NextPage = () => {
   const [form, setForm] = useState<loginForm>({
@@ -56,7 +55,6 @@ const LoginPage: NextPage = () => {
         password: form.password,
       })
       .then((res: { data: credentials }) => {
-        setCredentials(res.data);
         window.localStorage.setItem("creds", JSON.stringify(res.data));
         router.push("/");
       })

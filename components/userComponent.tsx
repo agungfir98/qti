@@ -1,5 +1,4 @@
 import React from "react";
-import TableComponent from "./table/tableComponent";
 import { UserTable } from "./user/userTable";
 
 const UserComponent = () => {

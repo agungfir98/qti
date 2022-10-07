@@ -1,12 +1,25 @@
+import { useState } from "react";
+import { credentials } from "../types/type";
+
 export const Navbar: React.FC<{
   setNavOpen: () => void;
 }> = ({ setNavOpen }) => {
-  const data = {
-    name: "Agung Firmansyah",
-    role: "Administrator",
-  };
+  const [cred, setCred] = useState<string>((): any => {
+    if (typeof window !== "undefined")
+      return window.localStorage.getItem("creds");
+  });
 
+  const user: credentials = JSON.parse(cred);
   const handleToggleNav = () => setNavOpen();
+
+  const initialName = () => {
+    return user.employee
+      .split(" ")
+      .slice(0, 2)
+      .map((v) => v[0])
+      .join("")
+      .toUpperCase();
+  };
 
   return (
     <nav className="w-full bg-[#F6F6F9] h-[73px] px-5 md:px-8 flex justify-between items-center">
@@ -33,14 +46,14 @@ export const Navbar: React.FC<{
       </div>
       <div id="profile" className="flex gap-3 h-10 items-center">
         <div className="flex rounded-full  w-10 h-10 bg-black text-white font-bold items-center justify-center">
-          AF
+          {initialName()}
         </div>
         <div id="profilename" className="hidden md:block">
           <div id="name" className="font-medium">
-            {data.name}
+            {user.email}
           </div>
           <div id="role" className="font-normal text-[rgba(52,52,52,0.7)]">
-            {data.role}
+            {user.employee}
           </div>
         </div>
         <div id="downarrow">

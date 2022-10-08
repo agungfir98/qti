@@ -1,17 +1,34 @@
-import { Router, useRouter } from "next/router";
-import React, { createContext, FormEvent, useEffect, useState } from "react";
-import { credentials, UsersData } from "../types/type";
+import React, { createContext, useEffect, useState } from "react";
+import { actionButtonKind, credentials, UsersData } from "../types/type";
 import { api } from "../utils/api";
+import CreateUserModal from "./modal/createUserModal";
+import DeleteUserModal from "./modal/deleteUserModal";
+import { EditModalContent } from "./modal/editModalContent";
+import ModalContainer from "./modal/modal";
 import { UserTable } from "./user/userTable";
 export const UserParamContext = createContext(
   {} as {
     params: { pageNum: number; pageSize: number; search: string };
     Data: UsersData;
+    ModalOpen: boolean;
+    userData: {
+      id: string;
+      employee: string;
+      email: string;
+      is_active: boolean;
+      password: string;
+      confirm_password: string;
+      departement: string;
+    };
   }
 );
 
 const UserComponent = () => {
-  const [params, setParams] = useState({
+  const [params, setParams] = useState<{
+    pageNum: UsersData["page"];
+    pageSize: UsersData["page_size"];
+    search: string;
+  }>({
     pageNum: 1,
     pageSize: 10,
     search: "",
@@ -22,8 +39,26 @@ const UserComponent = () => {
       return window.localStorage.getItem("creds") || "";
     }
   });
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [actionBtnKind, setActionBtnKind] = useState<string>("");
+  const [userData, setUserData] = useState<{
+    id: string;
+    employee: string;
+    email: string;
+    is_active: boolean;
+    password: string;
+    confirm_password: string;
+    departement: string;
+  }>({
+    email: "",
+    employee: "",
+    id: "",
+    is_active: false,
+    password: "",
+    confirm_password: "",
+    departement: "",
+  });
 
-  const router = useRouter();
   const user: credentials = JSON.parse(cred);
 
   useEffect(() => {
@@ -39,8 +74,8 @@ const UserComponent = () => {
       .catch((err) => {
         console.error(err);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user.token]);
+
   const handleChangePage = async (index: number) => {
     api
       .get(`/user/?page=${index}`, {
@@ -71,8 +106,59 @@ const UserComponent = () => {
       });
   };
 
+  const handleEditChange = (e: any) => {
+    const { name, value } = e.target;
+    setUserData((prev) => {
+      if (name === "email") {
+        return { ...prev, email: value };
+      }
+      if (name === "employee") {
+        return { ...prev, employee: value };
+      }
+      if (name === "password") {
+        return { ...prev, password: value };
+      }
+      if (name === "confirmPassword") {
+        return { ...prev, confirm_password: value };
+      }
+      if (name === "isactive") {
+        return { ...prev, is_active: !prev.is_active };
+      }
+      if (name === "departement") {
+        return { ...prev, departement: value };
+      }
+      return { ...prev };
+    });
+  };
+
   return (
-    <UserParamContext.Provider value={{ params, Data }}>
+    <UserParamContext.Provider
+      value={{
+        params,
+        Data,
+        ModalOpen: modalOpen,
+        userData,
+      }}
+    >
+      <ModalContainer
+        handleModalOpen={() => {
+          setModalOpen(false);
+          setUserData((prev) => {
+            return { ...prev, password: "", confirm_password: "" };
+          });
+        }}
+      >
+        {actionBtnKind === actionButtonKind.EDIT ? (
+          <EditModalContent
+            handleModalOpen={() => setModalOpen(false)}
+            handleEditChange={(e) => handleEditChange(e)}
+          />
+        ) : actionBtnKind === actionButtonKind.DELETE ? (
+          <DeleteUserModal handleModalOpen={() => setModalOpen(false)} />
+        ) : actionBtnKind === actionButtonKind.CREATE ? (
+          <CreateUserModal />
+        ) : null}
+      </ModalContainer>
       <div className="grid grid-cols-1 gap-5">
         <div className="flex flex-col md:flex-row gap-2 justify-between item-center">
           <div>
@@ -119,6 +205,10 @@ const UserComponent = () => {
               <div
                 id="createbtn"
                 className="grow bg-green-600 max-h-9 rounded-md px-3 p-5 flex items-center text-white cursor-pointer"
+                onClick={() => {
+                  setModalOpen(true);
+                  setActionBtnKind(actionButtonKind.CREATE);
+                }}
               >
                 <div id="icon" className="pr-2 ">
                   <svg
@@ -143,7 +233,22 @@ const UserComponent = () => {
             </div>
           </div>
         </div>
-        <UserTable handleChangePage={(i) => handleChangePage(i)} />
+        <UserTable
+          handleChangePage={(i) => handleChangePage(i)}
+          handleActionBtn={(str, data) => {
+            setActionBtnKind(str);
+            setModalOpen(true);
+            setUserData((prev) => {
+              return {
+                ...prev,
+                email: data.email,
+                employee: data.employee,
+                is_active: data.is_active,
+                id: data.id,
+              };
+            });
+          }}
+        />
       </div>
     </UserParamContext.Provider>
   );

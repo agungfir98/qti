@@ -14,7 +14,7 @@ const LoginPage: NextPage = () => {
     if (typeof window !== "undefined")
       return window.localStorage.getItem("creds");
   });
-  const [errorMsg, setErrorMsg] = useState<[]>([]);
+  const [errorMsg, setErrorMsg] = useState<string | [] | null>(null);
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
@@ -61,11 +61,11 @@ const LoginPage: NextPage = () => {
       .catch((err) => {
         const { status } = err.response;
         if (status === 422) {
-          console.error(err);
+          console.error(err.message);
           setErrorMsg(() => err.detail.map((v: { loc: [] }) => v.loc));
         }
         if (status === 400) {
-          console.error(err.message);
+          setErrorMsg("email or password invalid");
         }
         status === 500 && console.error(err);
       });
@@ -78,6 +78,15 @@ const LoginPage: NextPage = () => {
     () => setLoading(false);
   }, [cred, router]);
 
+  useEffect(() => {
+    const err = setTimeout(() => {
+      setErrorMsg(null);
+    }, 3000);
+
+    return () => {
+      clearTimeout(err);
+    };
+  }, [errorMsg]);
   return (
     <>
       {!loading && (
@@ -91,6 +100,7 @@ const LoginPage: NextPage = () => {
                 Welcome back, enter your credentials to continue
               </p>
             </header>
+            {errorMsg && <p className={`text-red-500`}>{errorMsg}</p>}
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
               {/* // *Email ======== */}
               <div className="w-full flex flex-col gap-1">

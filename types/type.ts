@@ -37,3 +37,19 @@ export enum actionButtonKind {
   DELETE = "delete",
   CREATE = "create",
 }
+
+export interface createUserErrorObj {
+  confirm_password: [""];
+  departement: [""];
+  email: [""];
+  employee: [""];
+  password: [""];
+}
+
+export interface editUserErrorObj {
+  employee: [""];
+  password: [""];
+  confirm_password: [""];
+  departement: [""];
+  email: [""];
+}

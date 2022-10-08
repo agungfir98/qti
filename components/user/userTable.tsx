@@ -1,33 +1,43 @@
 import Link from "next/link";
 import React, { FormEvent, useContext, useEffect, useState } from "react";
+import { actionButtonKind, UserData } from "../../types/type";
 import { UserParamContext } from "../userComponent";
 
 export const UserTable: React.FC<{
   handleChangePage: (index: number) => void;
-}> = ({ handleChangePage }) => {
+  handleActionBtn: (str: string, data: UserData) => void;
+}> = ({ handleChangePage, handleActionBtn }) => {
   const { Data, params } = useContext(UserParamContext);
   let arr = [];
   for (let i = 0; i < Data.page_count; i++) {
     arr.push(i + 1);
   }
 
+  const handleLeftBtn = () => {
+    if (Data.page === 1) return;
+    handleChangePage(Data.page - 1);
+  };
+  const handleRightBtn = () => {
+    if (Data.page === Data.page_count) return;
+    handleChangePage(Data.page + 1);
+  };
   return (
     <div className="flex flex-col gap-2 w-full">
       <div id="table">
-        <table className="table-auto w-full text-center text-xs">
+        <table className="table-auto w-full text-left text-xs px-5">
           <thead className="bg-[#F9F9FC]">
-            <tr className="border-b-1 border-slate-500 h-14">
-              <th className={`w-[20%]`}>Employee</th>
-              <th className={`hidden md:table-cell w-[20%]`}>Email</th>
-              <th className={`hidden md:table-cell w-[20%]`}>Departement</th>
-              <th className={`hidden md:table-cell w-[20%]`}>Status</th>
-              <th className={`w-[20%]`}>Action</th>
+            <tr className="border-b-1 border-slate-500 h-14 text-left">
+              <th className={`px-5`}>Employee</th>
+              <th className={`hidden md:table-cell px-5 `}>Email</th>
+              <th className={`hidden md:table-cell px-5 `}>Departement</th>
+              <th className={`hidden md:table-cell px-5 `}>Status</th>
+              <th className={`px-5`}>Action</th>
             </tr>
           </thead>
           <tbody className="bg-white">
             {Data.results?.map((v, i) => (
               <tr key={i} className="border-b-2 border-slate-200 h-fit">
-                <td className="py-[5px] grid grid-cols-3">
+                <td className="py-[5px] px-5">
                   <div className="col-span-2 col-start-2 flex gap-2 justify-start items-center">
                     <div className="w-10 h-10 rounded-full bg-red-400 flex justify-center items-center">
                       {v.employee
@@ -40,11 +50,13 @@ export const UserTable: React.FC<{
                     <p>{v.employee}</p>
                   </div>
                 </td>
-                <td className="hidden md:table-cell">{v.employee}</td>
-                <td className="hidden md:table-cell">Marketing</td>
+                <td className="hidden md:table-cell px-5">{v.email}</td>
+                <td className="hidden md:table-cell px-5">
+                  {v.departement || "None"}
+                </td>
                 {/* //* IsActive */}
-                <td className="hidden md:table-cell">
-                  <div className="flex justify-center">
+                <td className="hidden md:table-cell px-5">
+                  <div className="">
                     <div
                       className={`h-fit w-fit px-1 py-2 ${
                         v.is_active
@@ -59,9 +71,14 @@ export const UserTable: React.FC<{
                   </div>
                 </td>
                 {/* // * Action */}
-                <td>
-                  <div className="flex justify-center gap-1">
-                    <button id="a" className="bg-black p-1 rounded-md">
+                <td className="px-5">
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => handleActionBtn(actionButtonKind.EDIT, v)}
+                      data-user={v}
+                      id="a"
+                      className="bg-black p-1 rounded-md"
+                    >
                       <svg
                         width="20"
                         height="20"
@@ -75,7 +92,14 @@ export const UserTable: React.FC<{
                         />
                       </svg>
                     </button>
-                    <button id="b" className="bg-[#F93F40] p-1 rounded-md">
+                    <button
+                      onClick={() =>
+                        handleActionBtn(actionButtonKind.DELETE, v)
+                      }
+                      data-user-id={v.id}
+                      id="b"
+                      className="bg-[#F93F40] p-1 rounded-md"
+                    >
                       <svg
                         width="20"
                         height="20"
@@ -101,7 +125,11 @@ export const UserTable: React.FC<{
         id="pagination"
         className="self-center md:self-end flex gap-9 items-center"
       >
-        <div id="leftIcon" className="cursor-pointer">
+        <div
+          id="leftIcon"
+          className={`${Data.page <= 1 && "hidden"} cursor-pointer`}
+          onClick={handleLeftBtn}
+        >
           <svg
             width="10"
             height="18"
@@ -137,7 +165,13 @@ export const UserTable: React.FC<{
             </li>
           ))}
         </ul>
-        <div id="rightIcon" className="cursor-pointer">
+        <div
+          id="rightIcon"
+          className={`${
+            Data.page == Data.page_count && "hidden"
+          } cursor-pointer`}
+          onClick={handleRightBtn}
+        >
           <svg
             width="10"
             height="18"

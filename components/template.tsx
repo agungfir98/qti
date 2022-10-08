@@ -6,7 +6,7 @@ import { SideNav } from "./sideNav";
 export const sideNavContext = createContext({ sideNavOpen: false });
 
 export const Template: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [sideNavOpen, setSideNavOpen] = useState<boolean>(true);
+  const [sideNavOpen, setSideNavOpen] = useState<boolean>(false);
 
   const [cred, setCred] = useState<string>((): any => {
     if (typeof window !== "undefined")

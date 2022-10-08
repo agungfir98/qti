@@ -18,7 +18,7 @@ export const SideNav: React.FC<{
     <>
       <div
         className={`${
-          !sideNavOpen ? "-left-[999px] lg:w-0" : "left-0 lg:w-[260px]"
+          !sideNavOpen ? "-left-[999px] lg:w-[260px] " : "left-0 lg:w-0"
         } h-[100vh] w-full transition-all duration-1000 ease-in-out bg-black/50 absolute  top-0 flex overflow-hidden lg:static z-10`}
       >
         <nav className="max-w-[300px] h-full bg-[#F6F6F9] pt-[21px] px-3 flex flex-col gap-2 grow fill-[#2D3657]">

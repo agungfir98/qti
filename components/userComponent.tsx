@@ -149,10 +149,7 @@ const UserComponent = () => {
         }}
       >
         {actionBtnKind === actionButtonKind.EDIT ? (
-          <EditModalContent
-            handleModalOpen={() => setModalOpen(false)}
-            handleEditChange={(e) => handleEditChange(e)}
-          />
+          <EditModalContent handleEditChange={(e) => handleEditChange(e)} />
         ) : actionBtnKind === actionButtonKind.DELETE ? (
           <DeleteUserModal handleModalOpen={() => setModalOpen(false)} />
         ) : actionBtnKind === actionButtonKind.CREATE ? (

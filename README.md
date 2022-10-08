@@ -36,3 +36,13 @@ to build:
 ```bash
 npm run build
 ```
+
+run production:
+
+```bash
+npm start
+```
+
+additional information.
+Chart used in dashboard are from react-chartjs-2 and the data are randomly generated.
+credential and accessToken are stored in localstorage with keys named creds; every page reload causes page to send get request to /auth/me to refreshed the token.

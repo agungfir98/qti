@@ -1,16 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FormEvent } from "react";
+import { editUserErrorObj } from "../../types/type";
 import { api } from "../../utils/api";
 import { credContext } from "../template";
 import { UserParamContext } from "../userComponent";
 
 export const EditModalContent: React.FC<{
   handleEditChange: (e: FormEvent) => void;
-  handleModalOpen: () => void;
-}> = ({ handleEditChange, handleModalOpen }) => {
+}> = ({ handleEditChange }) => {
   const { userData } = useContext(UserParamContext);
   const { cred } = useContext(credContext);
   const token = JSON.parse(cred).token;
+
+  const [errorMsg, setErrorMsg] = useState({} as editUserErrorObj | null);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -35,9 +37,22 @@ export const EditModalContent: React.FC<{
         location.reload();
       })
       .catch((err) => {
-        console.error(err);
+        console.error(err.response.data);
+        const { status } = err.response;
+        if (status === 400) {
+          setErrorMsg(err.response.data);
+        }
       });
   };
+
+  useEffect(() => {
+    const errTO = setTimeout(() => {
+      setErrorMsg(null);
+    }, 3000);
+    return () => {
+      clearTimeout(errTO);
+    };
+  }, [errorMsg]);
 
   return (
     <div className="flex flex-col gap-2">
@@ -45,6 +60,9 @@ export const EditModalContent: React.FC<{
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         {/* // *Email ======== */}
         <div className="w-full flex flex-col gap-1">
+          {errorMsg?.email && (
+            <p className="text-red-500">{errorMsg?.email[0]}</p>
+          )}
           <label htmlFor="email" className="font-semibold text-sm">
             Email
           </label>
@@ -60,6 +78,9 @@ export const EditModalContent: React.FC<{
         </div>
         {/* // *employee */}
         <div className="w-full flex flex-col gap-1">
+          {errorMsg?.employee && (
+            <p className="text-red-500">{errorMsg?.employee[0]}</p>
+          )}
           <label htmlFor="employee" className="font-semibold text-sm">
             employee
           </label>
@@ -75,6 +96,9 @@ export const EditModalContent: React.FC<{
         </div>
         {/* // *password */}
         <div className="w-full flex flex-col gap-1">
+          {errorMsg?.password && (
+            <p className="text-red-500">{errorMsg?.password[0]}</p>
+          )}
           <label htmlFor="password" className="font-semibold text-sm">
             password
           </label>
@@ -90,6 +114,9 @@ export const EditModalContent: React.FC<{
         </div>
         {/* // *confirm password */}
         <div className="w-full flex flex-col gap-1">
+          {errorMsg?.confirm_password && (
+            <p className="text-red-500">{errorMsg?.confirm_password[0]}</p>
+          )}
           <label htmlFor="confirmPassword" className="font-semibold text-sm">
             confirm password
           </label>
@@ -125,6 +152,9 @@ export const EditModalContent: React.FC<{
         </div>
         {/* // *Departement */}
         <div className="w-full flex flex-col gap-1">
+          {errorMsg?.departement && (
+            <p className="text-red-500">{errorMsg?.departement[0]}</p>
+          )}
           <label htmlFor="departement" className="font-semibold text-sm">
             departement
           </label>

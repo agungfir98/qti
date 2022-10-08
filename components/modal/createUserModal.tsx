@@ -3,7 +3,9 @@ import React, {
   useState,
   FormEvent,
   HTMLInputTypeAttribute,
+  useEffect,
 } from "react";
+import { createUserErrorObj } from "../../types/type";
 import { api } from "../../utils/api";
 import { credContext } from "../template";
 
@@ -11,6 +13,7 @@ const CreateUserModal: React.FC = () => {
   const { cred } = useContext(credContext);
   const token = JSON.parse(cred).token;
 
+  const [errorMsg, setErrorMsg] = useState({} as createUserErrorObj | null);
   const [userData, setUserData] = useState({
     email: "",
     employee: "",
@@ -60,9 +63,23 @@ const CreateUserModal: React.FC = () => {
         location.reload();
       })
       .catch((err) => {
-        console.error(err);
+        const { status } = err.response;
+        if (status === 400) {
+          setErrorMsg(() => {
+            return err.response.data;
+          });
+        }
       });
   };
+
+  useEffect(() => {
+    const errTO = setTimeout(() => {
+      setErrorMsg(null);
+    }, 3000);
+    return () => {
+      clearTimeout(errTO);
+    };
+  }, [errorMsg]);
 
   return (
     <div className="flex flex-col gap-3">
@@ -70,6 +87,9 @@ const CreateUserModal: React.FC = () => {
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         {/* // *Email ======== */}
         <div className="w-full flex flex-col gap-1">
+          {errorMsg?.email && (
+            <p className="text-red-500">{errorMsg?.email[0]}</p>
+          )}
           <label htmlFor="email" className="font-semibold text-sm">
             Email
           </label>
@@ -85,6 +105,9 @@ const CreateUserModal: React.FC = () => {
         </div>
         {/* // *employee ======== */}
         <div className="w-full flex flex-col gap-1">
+          {errorMsg?.employee && (
+            <p className="text-red-500">{errorMsg?.employee[0]}</p>
+          )}
           <label htmlFor="employee" className="font-semibold text-sm">
             employee
           </label>
@@ -100,6 +123,9 @@ const CreateUserModal: React.FC = () => {
         </div>
         {/* // *password ======== */}
         <div className="w-full flex flex-col gap-1">
+          {errorMsg?.password && (
+            <p className="text-red-500">{errorMsg?.password[0]}</p>
+          )}
           <label htmlFor="password" className="font-semibold text-sm">
             password
           </label>
@@ -115,6 +141,9 @@ const CreateUserModal: React.FC = () => {
         </div>
         {/* // *confirm passwrod ======== */}
         <div className="w-full flex flex-col gap-1">
+          {errorMsg?.confirm_password && (
+            <p className="text-red-500">{errorMsg?.confirm_password[0]}</p>
+          )}
           <label htmlFor="confirmPasswrod" className="font-semibold text-sm">
             confirm passwrod
           </label>
@@ -147,6 +176,9 @@ const CreateUserModal: React.FC = () => {
         </div>
         {/* // *departement ======== */}
         <div className="w-full flex flex-col gap-1">
+          {errorMsg?.departement && (
+            <p className="text-red-500">{errorMsg?.departement[0]}</p>
+          )}
           <label htmlFor="departement" className="font-semibold text-sm">
             departement
           </label>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { credentials } from "../types/type";
+import { useRouter } from "next/router";
 
 export const Navbar: React.FC<{
   setNavOpen: () => void;
@@ -8,17 +9,24 @@ export const Navbar: React.FC<{
     if (typeof window !== "undefined")
       return window.localStorage.getItem("creds");
   });
+  const [showDropDown, setShowDropDown] = useState(false);
 
+  const router = useRouter();
   const user: credentials = JSON.parse(cred);
   const handleToggleNav = () => setNavOpen();
 
   const initialName = () => {
-    return user.employee
+    return user?.employee
       .split(" ")
       .slice(0, 2)
       .map((v) => v[0])
       .join("")
       .toUpperCase();
+  };
+
+  const handleLogout = () => {
+    window.localStorage.removeItem("creds");
+    router.push("/login");
   };
 
   return (
@@ -44,19 +52,23 @@ export const Navbar: React.FC<{
         </div>
         <h1 className="font-bold text-xl cursor-default">LOGO</h1>
       </div>
-      <div id="profile" className="flex gap-3 h-10 items-center">
+      <div id="profile" className="flex gap-3 h-10 items-center relative">
         <div className="flex rounded-full  w-10 h-10 bg-black text-white font-bold items-center justify-center">
           {initialName()}
         </div>
         <div id="profilename" className="hidden md:block">
           <div id="name" className="font-medium">
-            {user.email}
+            {user?.email}
           </div>
           <div id="role" className="font-normal text-[rgba(52,52,52,0.7)]">
-            {user.employee}
+            {user?.employee}
           </div>
         </div>
-        <div id="downarrow">
+        <div
+          id="downarrow"
+          className="cursor-pointer"
+          onClick={() => setShowDropDown(!showDropDown)}
+        >
           <svg
             width="18"
             height="11"
@@ -69,6 +81,24 @@ export const Navbar: React.FC<{
               fill="#03050B"
             />
           </svg>
+        </div>
+        <div
+          className={` transition-all duration-1000 ease-in-out absolute right-0 -bottom-16 overflow-hidden p-1 z-10`}
+        >
+          <ul
+            className={`${
+              showDropDown ? "translate-y-0" : "-translate-y-16 "
+            } transition-all ease-in-out w-full bg-white px-2 py-3 rounded-md outline outline-1 outline-slate-400`}
+          >
+            <li>
+              <button
+                className="bg-red-500 px-12 py-1 text-white rounded-md"
+                onClick={handleLogout}
+              >
+                logout
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
     </nav>

@@ -17,16 +17,23 @@ export enum activePath {
   SALES = "/sales",
   USER = "/user",
 }
-
+export interface UserData {
+  id: string;
+  employee: string;
+  email: string;
+  is_active: boolean;
+  departement: string;
+}
 export interface UsersData {
   count: number;
   page_count: number;
   page_size: number;
   page: number;
-  results: {
-    id: string;
-    employee: string;
-    email: string;
-    is_active: boolean;
-  }[];
+  results: UserData[];
+}
+
+export enum actionButtonKind {
+  EDIT = "edit",
+  DELETE = "delete",
+  CREATE = "create",
 }
